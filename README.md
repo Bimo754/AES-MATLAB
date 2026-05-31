@@ -1,54 +1,47 @@
 # AES-MATLAB
-A AES-Inspired Cryptography Program using MATLAB with character-based matrix manipulation.
 
-## About
-* Course-based Project - VCC SCIE 1180 (Introduction to Engineering Analysis)
-* Active in August 2016
-* Individual Project
-* Professor: Pooya Taheri
+A professional, high-performance cryptography suite implemented in MATLAB. This application provides an AES-inspired text encryption and decryption pipeline with a modern, programmatic GUI.
 
-## Project Info
-* AES-inspired ASCII-based text encryption and decryption ([source](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard))
-* MATLAB-based
-* Converts text to a matrix table and vise-versa.
-* GUI created using GUIDE
-* All steps broken down into separate .m files
+## Key Features
+*   **100% Programmatic GUI:** Self-contained architecture with no binary `.fig` file dependencies.
+*   **Modern Aesthetic:** High-contrast "Cyberpunk" dark mode theme.
+*   **Performance Optimized:** Fully vectorized matrix operations for maximum efficiency.
+*   **Robust Cryptography:** Implements ShiftRows, MixColumns, and AddRoundKey transformations.
+*   **Smart Clipboard:** Integrated Copy/Clear utilities with automatic MATLAB array formatting.
 
-## Project Breakdown
+## Project Structure
+*   **`AES.m`**: Main entry point and programmatic UI driver.
+*   **`gen_key.m`**: High-level cryptographic key derivation.
+*   **`ENCRYPT/`**: Modular encryption pipeline.
+    *   `encrypt_data.m`: Main encryption driver.
+    *   `add_key.m`: Vectorized key addition.
+    *   `mix_col.m`: Optimized column-wise multiplication.
+    *   `shift_row.m`: Built-in circular shifting.
+    *   `convert_sq.m`: Data-to-matrix transformation with padding.
+*   **`DECRYPT/`**: Modular decryption pipeline.
+    *   `decrypt_data.m`: Main decryption driver.
+    *   `remove_key.m`: Vectorized key removal.
+    *   `rev_mix_col.m`: Optimized column-wise division.
+    *   `rev_shift_row.m`: Built-in circular shifting.
+    *   `convert_line.m`: Matrix-to-data transformation.
 
-### Encrypt/Decrypt
-* Provides the steps to complete encryption/decryption
-* Requires a minimum key length of four characters, at least one repetition to perform mix_col, add_key_to_data and shift_row and some data.
-* Performs the following steps:  
+## Technical Implementation
 
-1. Convert user data into ASCII of int64.
-2. Generate Key
-3. Convert data to square matrix and an ASCII integer.
-4. Add the key to the data.
-5. Repeats the following in repetition  
-i. Shift the row  
-ii. Creates an array based on the column and multiplies them.  
-iii. Add the key to the data.  
-6. Shift the row a last time
-7. Add the key to the data a last time.
+### The Pipeline
+The encryption process follows a systematic flow:
+1.  **Normalization:** Text is converted to ASCII integers and reshaped into a square matrix.
+2.  **Key Expansion:** A polynomial key is derived from the user password, ensuring non-zero digits to prevent information loss.
+3.  **Transformation Rounds:** Data undergoes `N` repetitions of:
+    *   **ShiftRows**: Row-wise cyclic shifts.
+    *   **MixColumns**: Column mixing via element-wise multiplication with the polynomial key.
+    *   **AddRoundKey**: Scalar matrix addition with the derived key.
 
-* For the decrypt, steps 3-6 are performed in reverse order.
+### Performance
+The implementation leverages MATLAB's internal optimizations by using vectorized operations instead of nested loops. Transformations like `ShiftRows` utilize the built-in `circshift` function, ensuring high-speed data processing even for large datasets.
 
-### Gen_key
-* Creates a key by converting the user password key into an int16 array. This is then transposed and multiplied together, then rounded.
-* Output is an int.
-
-### Add_key_to_data
-* Adds the key to all elements of the user data.
-
-### Convert_sq
-* Converts the text data to be encrypted as a square.
-* If the data cannot be directly converted, then filler data is put in to achieve an appropriate size.
-
-### Mix_col
-* Creates a polynomial key using the crypto key by using the remainders/ the digits from right to left as the poly key.
-* Polykey is multiplied to each column
-* This array key is multiplied into columns of data
-
-### Shift_row/Rev_shift_row
-* Moves the elements to the left by m-1, where m is the position on the matrix
+## How to Use
+1.  Open MATLAB and navigate to the project directory.
+2.  Type `AES` in the Command Window to launch the GUI.
+3.  **Encrypt**: Enter your text, set a password (min 4 characters), and click **ENCRYPT**.
+4.  **Decrypt**: Paste the encrypted numeric matrix into the input field, enter the same password and repetitions, and click **DECRYPT**.
+5.  **Utilities**: Use the **COPY** button to format numeric results for immediate re-input, and **CLEAR** to reset the output window.
